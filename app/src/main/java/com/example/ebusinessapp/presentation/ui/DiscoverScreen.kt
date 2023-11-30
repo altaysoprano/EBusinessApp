@@ -20,6 +20,8 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.TileOverlayOptions
@@ -51,22 +53,32 @@ class DiscoverScreen : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mGoogleMap = googleMap
+        addMarker(LatLng(13.456, 14.455))
+        addDraggableMarker(LatLng(12.446, 12.778))
         addHeatMap()
         getCurrentLocation()
     }
 
     private fun setMap() {
-        Places.initialize(requireContext().applicationContext, getString(R.string.google_maps_api_key))
-        autocompleteFragment = childFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
-        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.ADDRESS, Place.Field.LAT_LNG))
-        autocompleteFragment.setOnPlaceSelectedListener(object: PlaceSelectionListener {
-            override fun onError(p0: Status) {
-                Toast.makeText(requireContext(), "Some Error in Search", Toast.LENGTH_SHORT).show()
+        Places.initialize(
+            requireContext().applicationContext,
+            getString(R.string.google_maps_api_key)
+        )
+        autocompleteFragment =
+            childFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
+        autocompleteFragment.setPlaceFields(
+            listOf(
+                Place.Field.ID,
+                Place.Field.ADDRESS,
+                Place.Field.LAT_LNG
+            )
+        )
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onError(status: Status) {
+                // Toast
             }
 
             override fun onPlaceSelected(place: Place) {
-                // val add = place.address
-                // val id = place.id
                 val latLng = place.latLng
                 zoomOnMap(latLng)
             }
@@ -144,7 +156,7 @@ class DiscoverScreen : Fragment(), OnMapReadyCallback {
                     val latLng = LatLng(location.latitude, location.longitude)
                     mGoogleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
                     mGoogleMap?.addMarker(
-                        MarkerOptions().position(latLng).title("Mevcut Konum")
+                        MarkerOptions().position(latLng).title("Current Location")
                     )
                 }
             }
@@ -162,4 +174,18 @@ class DiscoverScreen : Fragment(), OnMapReadyCallback {
         mGoogleMap?.addTileOverlay(TileOverlayOptions().tileProvider(heatMapProvider))
     }
 
+    private fun addDraggableMarker(position: LatLng) {
+        mGoogleMap?.addMarker(MarkerOptions()
+            .position(position)
+            .title("Draggable Marker")
+            .draggable(true)
+        )
+    }
+
+    private fun addMarker(position: LatLng) {
+        mGoogleMap?.addMarker(MarkerOptions()
+            .position(position)
+            .title("Marker")
+        )
+    }
 }
