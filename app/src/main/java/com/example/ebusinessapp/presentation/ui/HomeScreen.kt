@@ -1,6 +1,5 @@
 package com.example.ebusinessapp.presentation.ui
 
-import DiscoverScreen
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -56,7 +55,7 @@ class HomeScreen : Fragment() {
             }
 
             R.id.action_navigation -> {
-                requestLocationPermissions()
+                navigateToDiscoverScreen()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -74,23 +73,8 @@ class HomeScreen : Fragment() {
         }
     }
 
-    private fun requestLocationPermissions() {
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
-        } else {
-            val discoverFragment = DiscoverScreen()
-            navRegister.navigateFrag(discoverFragment, true)
-        }
+    private fun navigateToDiscoverScreen() {
+        val discoverFragment = DiscoverScreen()
+        navRegister.navigateFrag(discoverFragment, true)
     }
 }
