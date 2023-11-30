@@ -1,13 +1,17 @@
 package com.example.ebusinessapp.presentation.ui
 
+import android.app.ActionBar
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.ebusinessapp.R
+import android.view.WindowManager
+import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import com.example.ebusinessapp.databinding.FragmentDiscoverScreenBinding
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class DiscoverScreen : Fragment() {
