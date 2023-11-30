@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.example.ebusinessapp.R
 import com.example.ebusinessapp.databinding.FragmentDiscoverScreenBinding
+import com.example.ebusinessapp.util.Constants
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -20,6 +21,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.TileOverlayOptions
+import com.google.maps.android.heatmaps.HeatmapTileProvider
+import kotlin.random.Random
 
 class DiscoverScreen : Fragment(), OnMapReadyCallback {
 
@@ -41,15 +45,9 @@ class DiscoverScreen : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mGoogleMap = googleMap
+        addHeatMap()
         getCurrentLocation()
     }
-
-/*
-    override fun onResume() {
-        super.onResume()
-        getCurrentLocation()
-    }
-*/
 
     private fun setMap() {
         val mapFragment =
@@ -126,4 +124,14 @@ class DiscoverScreen : Fragment(), OnMapReadyCallback {
             e.printStackTrace()
         }
     }
+
+    private fun addHeatMap() {
+        val heatMapProvider = HeatmapTileProvider.Builder()
+            .data(Constants.getHeatmapData())
+            .radius(20)
+            .build()
+
+        mGoogleMap?.addTileOverlay(TileOverlayOptions().tileProvider(heatMapProvider))
+    }
+
 }
